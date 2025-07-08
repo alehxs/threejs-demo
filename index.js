@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "jsm/loaders/GLTFLoader.js";
+import { FontLoader } from "jsm/loaders/FontLoader.js";
+import { TextGeometry } from "jsm/geometries/TextGeometry.js";
 
 function animate(time = 0) {
   requestAnimationFrame(animate);
@@ -55,6 +57,25 @@ mesh.scale.set(0.5, 0.5, 0.5);
 const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0xe8002d, 2);
 hemiLight.position.set(0, 1, 0);
 scene.add(hemiLight);
+
+const fontLoader = new FontLoader();
+fontLoader.load(
+  "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
+  (font) => {
+    const textGeo = new TextGeometry("Gorilla, the world is yours.", {
+      font,
+      size: 0.125,
+      height: 0.02,
+    });
+    textGeo.computeBoundingBox();
+    textGeo.center();
+
+    const textMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const textMesh = new THREE.Mesh(textGeo, textMaterial);
+    textMesh.position.set(0, -0.7, 0);
+    scene.add(textMesh);
+  },
+);
 
 const loader = new GLTFLoader();
 loader.load("Gorilla.glb", (gltf) => {
