@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "jsm/loaders/GLTFLoader.js";
 
 function animate(time = 0) {
   requestAnimationFrame(animate);
@@ -46,6 +47,7 @@ const wireMaterial = new THREE.MeshBasicMaterial({
 const wireMesh = new THREE.Mesh(geometry, wireMaterial);
 wireMesh.scale.setScalar(1.001);
 mesh.add(wireMesh);
+mesh.scale.set(0.5, 0.5, 0.5);
 
 // const hemiLight = new THREE.HemisphereLight(0xe8002d, 0x00e5f0, 2);
 // scene.add(hemiLight);
@@ -53,5 +55,13 @@ mesh.add(wireMesh);
 const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0xe8002d, 2);
 hemiLight.position.set(0, 1, 0);
 scene.add(hemiLight);
+
+const loader = new GLTFLoader();
+loader.load("Gorilla.glb", (gltf) => {
+  const model = gltf.scene;
+  model.position.set(0, 0.9, 0);
+  model.scale.set(0.1, 0.1, 0.1);
+  mesh.add(model);
+});
 
 animate();
